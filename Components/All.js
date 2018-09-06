@@ -29,13 +29,12 @@ export default class All extends React.Component {
       <Container>
       <Header>
           <Body style={{flex:1 ,justifyContent: 'center', alignItems: 'center', marginTop: 25}}>
-              <Title >Reactive Todos</Title>
-              
+              <Title >Reactive Todos</Title>  
           </Body>
       </Header>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>All!</Text>
-          
+      <Add/>    
       </View> 
     </Container> 
     )
