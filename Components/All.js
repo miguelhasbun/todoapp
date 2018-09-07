@@ -2,14 +2,22 @@ import React from 'react';
 import {Text, View } from 'react-native';
 import Add from './Add';
 import {Container, Button,Body,Title,Right,Header,Left} from 'native-base';
-
-
+import DialogInput from 'react-native-dialog-input';
 
 export default class All extends React.Component {
-   
-  constructor(props) {
-    super(props);
-    this.state = { loading: true };
+   constructor(props){
+       super(props);
+       this.state={
+           loading:true,
+           isDialogVisible: false
+       }
+       this.onPress=this.onPress.bind(this);
+       
+   }
+  onPress(){
+    this.setState({
+        isDialogVisible: true
+    })
   }
 
   async componentWillMount() {
@@ -34,8 +42,17 @@ export default class All extends React.Component {
       </Header>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>All!</Text>
-      <Add/>    
+      <Add func = {this.onPress}/>    
       </View> 
+      
+      <DialogInput isDialogVisible={this.state.isDialogVisible}
+            title={"Agregar nueva Tarea"}
+            hintInput ={"Ingrese nueva tarea"}
+            submitInput={(inputedText) => {this.handleChangedText(inputedText)}}
+            closeDialog={ () => {this.setState({isDialogVisible: false})}}>
+        </DialogInput>
+ 
+      
     </Container> 
     )
 }
