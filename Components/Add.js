@@ -11,6 +11,9 @@ export default class Add extends React.Component {
         <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => this.props.func()}/> 
         
       );
+      //   submitInput={inputText => {
+     //        this.sendInput(inputText);
+     //    }}
     }
   }
 

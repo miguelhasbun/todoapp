@@ -1,41 +1,108 @@
 import React from 'react';
-import { Text, View} from 'react-native';
-import { createBottomTabNavigator  } from 'react-navigation'; 
-import All from './Components/All';
-import Checked from './Components/Checked';
-import Active from './Components/Active';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, Text, View } from 'react-native';
+import ActionButton from 'react-native-action-button';
+import Nav from './Components/Navigate';
+import Dialog from './Components/Dialogln';
+import { Header } from "react-native-elements";
 
 
-export default createBottomTabNavigator ({
-  Alls: All,
-  Actives: Active ,
-  Checkeds: Checked,
-  
-},
+export default class Checked extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todos: [],
+      shoWdialog: false,
+      cont : 1
+    };
+    this.shoWdialogs = this.shoWdialogs.bind(this);
+  }
+  shoWdialogs()
+  {
+    if(this.state.shoWdialog)
+    {
+      this.setState(
+        {
+          shoWdialog : false
+        }
+      )
+    }else
+    {
+      this.setState(
+        {
+          shoWdialog : true
+        }
+      )
+    }
+  }
+ toggleCheck = id => {
+    let newList = this.state.todos;
+    let index = newList.findIndex(x => x.id == id);
+    if (newList[index].checked) {
+      newList[index].checked = false;
+    } else {
+      newList[index].checked = true;
+    }
 
+    this.setState({ todos: newList });
+  };
 
-{
-  navigationOptions: ({ navigation }) => ({
-    tabBarIcon: ({ focused, tintColor }) => {
-      const { routeName } = navigation.state;
-      let iconName;
-      if (routeName === 'Alls') {
-        iconName = `ios-menu${focused ? '' : '-outline'}`;
-      } else if (routeName === 'Actives') {
-        iconName = `ios-flash${focused ? '' : '-outline'}`;
-      } else if (routeName === 'Checkeds') {
-        iconName = `ios-checkbox${focused ? '' : '-outline'}`;
+  deleteTask = id => {
+    let newList = this.state.todos.filter(x => x.id != id);
+    this.setState({ todos: newList });
+  };
+
+  sendInput = inputText => {
+    this.setState(
+      {
+        shoWdialog : false
       }
-       return <Ionicons name={iconName} size={25} color={tintColor} />;
+    )
+    let newCont = this.state.cont + 1;
+    let newItem = {
+      id: newCont.toString(),
+      todo: inputText,
+      checked: false
+    };
+    let newList = this.state.todos;
+    newList.push(newItem);
+    this.setState({ todos: newList, cont: newCont });
+  };
+
+    render() {
+      return (
+        <View style={{ flex: 1}}>
+        <Header
+          centerComponent={{
+            text: "Reactive ToDo's",
+            style: { color: "#fff", fontSize: 20 }
+          }}
+          backgroundColor="#694fad"
+        />
+        <Nav
+        screenProps={{
+          todos: this.state.todos,
+          toggleCheck: this.toggleCheck,
+          deleteTask: this.deleteTask
+        }}/>
+        <ActionButton
+          buttonColor="#9328B0"
+          offsetY = {65}
+          onPress={() => {
+            this.setState({
+              shoWdialog : true
+            })}}
+        />
+        {this.state.shoWdialog  && <Dialog isVisible = {this.shoWdialogs} in = {this.sendInput}/>}
+        </View>
+      );
+    }
+  }
+
+  const styles = StyleSheet.create({
+    actionButtonIcon: {
+      fontSize: 20,
+      height: 22,
+      color: 'white',
     },
-  }),
-  tabBarOptions: {
-    activeTintColor: 'tomato',
-    inactiveTintColor: 'gray',
-  },
-}
-
-
-);
+  });
 
